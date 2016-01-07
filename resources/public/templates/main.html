@@ -1,0 +1,42 @@
+<main>
+	<h3>Test cases list</h3>
+	<form name="findTestCaseForm" ng-submit="findTestCase()">
+		<label for="title">title</label>
+		<input type="text" name="title" placeholder="title" ng-model="findingTitle" required>
+		<button type="submit" ng-disabled="findTestCaseForm.$invalid">Find</button>
+	</form>
+	<table>
+		<thead>
+			<tr>
+				<td ng-repeat="tableHeaderItem in tableHeaderItems track by $index">
+					{{tableHeaderItem}}
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="testCase in testCases track by $index">
+				<td>{{testCase.id}}</td>
+				<td>{{testCase.title}}</td>
+				<td>{{testCase.description}}</td>
+				<td>{{testCase.owner}}</td>
+				<td>{{testCase.priority}}</td>
+				<td>{{testCase.location}}</td>
+				<td>{{testCase.status}}</td>
+				<td>{{testCase.steps}}</td>
+				<td>{{testCase.expectedResults}}</td>
+				<td>{{testCase.assignedTo}}</td>
+				<td>{{testCase.version}}</td>
+				<td><a href="#/edittestcase/{{testCase.id}}">edit</a></td>
+				<td><a href="#/deletetestcase/{{testCase.id}}">delete</a></td>
+			<tr>
+		</tbody>
+	</table>
+	<ul>
+		<li ng-if="!paginationDisabled()" ng-repeat="page in pages" ng-click="setPage(page)">
+			<span ng-if="isCurrentPage(page)">{{page}}</span>
+			<a ng-if="!isCurrentPage(page)" href="#/">{{page}}</a>
+		</li>
+	</ul>
+	<br>
+	<a href="#/addtestcase">Add new test case</a>
+</main>

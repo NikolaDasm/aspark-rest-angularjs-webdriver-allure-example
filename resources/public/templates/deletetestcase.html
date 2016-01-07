@@ -1,0 +1,34 @@
+<main>
+	<h3>Delete this test case</h3>
+	<table>
+		<thead>
+			<tr>
+				<td ng-repeat="tableHeaderItem in tableHeaderItems track by $index">
+					{{tableHeaderItem}}
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{testCase.id}}</td>
+				<td>{{testCase.title}}</td>
+				<td>{{testCase.description}}</td>
+				<td>{{testCase.owner}}</td>
+				<td>{{testCase.priority}}</td>
+				<td>{{testCase.location}}</td>
+				<td>{{testCase.status}}</td>
+				<td>{{testCase.steps}}</td>
+				<td>{{testCase.expectedResults}}</td>
+				<td>{{testCase.assignedTo}}</td>
+				<td>{{testCase.version}}</td>
+				<td></td>
+				<td></td>
+			<tr>
+		</tbody>
+	</table>
+	<form name="deleteTestCaseForm" ng-submit="deleteTestCase()">
+		<button type="submit">Delete</button>
+	</form>
+	<br>
+	<a href="#/">Main page</a>
+</main>

@@ -1,0 +1,38 @@
+<main>
+	<h3>{{message}}</h3>
+	<form name="addTestCaseForm" ng-submit="addTestCase()" novalidate>
+		<label for="title">title</label>
+		<input type="text" name="title" placeholder="title" ng-model="testCase.title" required>
+		<br>
+		<label for="description">description</label>
+		<input type="text" name="description" placeholder="description" ng-model="testCase.description" required>
+		<br>
+		<label for="priority">priority [1-5]</label>
+		<input type="text" name="priority" placeholder="priority" ng-model="testCase.priority" required>
+		<br>
+		<label for="location">location</label>
+		<input type="text" name="location" placeholder="location" ng-model="testCase.location" required>
+		<br>
+		<label for="status">status [1-5]</label>
+		<input type="text" name="status" placeholder="status" ng-model="testCase.status" required>
+		<br>
+		<label for="steps">steps</label>
+		<textarea name="steps" placeholder="steps" ng-model="testCase.steps" required></textarea>
+		<br>
+		<label for="expected_results">expected results</label>
+		<textarea name="expected_results" placeholder="expected results" ng-model="testCase.expectedResults" required></textarea>
+		<br>
+		<label for="assigned_to">assigned to</label>
+		<input type="text" name="assigned_to" placeholder="assigned to" ng-model="testCase.assignedTo" required>
+		<br>
+		<label for="owner">owner</label>
+		<input type="text" name="owner" placeholder="owner" ng-model="testCase.owner" required>
+		<br>
+		<label for="version">version</label>
+		<input type="text" name="version" placeholder="version" ng-model="testCase.version" required>
+		<br>
+		<button type="submit" ng-disabled="addTestCaseForm.$invalid">Add</button>
+	</form>
+	<br>
+	<a href="#/">Main page</a>
+</main>
