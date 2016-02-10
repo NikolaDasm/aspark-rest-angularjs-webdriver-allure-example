@@ -1,6 +1,6 @@
 /*
  *  Examples: ASpark REST AngularJS WEBDriver Allure
- *  Copyright (C) 2015-2016  Nikolay Platov
+ *  Copyright (C) 2016  Nikolay Platov
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,25 +16,29 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nikoladasm.examples.aspark_angularjs_rest;
+package nikoladasm.examples.aspark_angularjs_rest.dataobjects;
 
-import java.io.Console;
+import java.util.Map;
 
-import nikoladasm.commons.configuration.properties.PropertyLoader;
-
-
-public class Launcher {
-
-	public static void main(String[] args) {
-		Config config = PropertyLoader.getInstance().populate(Config.class);
-		TestCasesService service = new TestCasesService(config);
-		service.start();
-		System.out.println("Application run on address \""+config.ipAddress+"\" and port \""+config.port+"\"");
-		Console console = System.console();
-		System.out.println("Enter \"x\" for exit");
-		try {
-			while (!console.readLine().trim().equalsIgnoreCase("x"));
-		} catch (Exception e) {}
-		service.stop();
+public class Pagination {
+	private int pages;
+	private Map<Integer,String> texts;
+	private Map<Integer,String> linkTexts;
+	private Map<Integer,String> references;
+	
+	public int pages() {
+		return pages;
+	}
+	
+	public Map<Integer,String> texts() {
+		return texts;
+	}
+	
+	public Map<Integer,String> linkTexts() {
+		return linkTexts;
+	}
+	
+	public Map<Integer,String> references() {
+		return references;
 	}
 }

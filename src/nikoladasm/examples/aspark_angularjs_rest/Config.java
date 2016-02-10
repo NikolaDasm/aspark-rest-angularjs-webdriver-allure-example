@@ -1,6 +1,6 @@
 /*
  *  Examples: ASpark REST AngularJS WEBDriver Allure
- *  Copyright (C) 2015-2016  Nikolay Platov
+ *  Copyright (C) 2016  Nikolay Platov
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,23 +18,20 @@
 
 package nikoladasm.examples.aspark_angularjs_rest;
 
-import java.io.Console;
+import nikoladasm.commons.configuration.properties.annotations.*;
 
-import nikoladasm.commons.configuration.properties.PropertyLoader;
-
-
-public class Launcher {
-
-	public static void main(String[] args) {
-		Config config = PropertyLoader.getInstance().populate(Config.class);
-		TestCasesService service = new TestCasesService(config);
-		service.start();
-		System.out.println("Application run on address \""+config.ipAddress+"\" and port \""+config.port+"\"");
-		Console console = System.console();
-		System.out.println("Enter \"x\" for exit");
-		try {
-			while (!console.readLine().trim().equalsIgnoreCase("x"));
-		} catch (Exception e) {}
-		service.stop();
-	}
+@Resource("settings.properties")
+public class Config {
+	
+	@Property("ipaddress.server")
+	@DefaultValue("0.0.0.0")
+	public String ipAddress;
+	
+	@Property("port.server")
+	@DefaultValue("8080")
+	public int port;
+	
+	@Property("filename.db")
+	@DefaultValue("testdb")
+	public String dbFileName;
 }

@@ -1,6 +1,6 @@
 /*
  *  Examples: ASpark REST AngularJS WEBDriver Allure
- *  Copyright (C) 2015-2016  Nikolay Platov
+ *  Copyright (C) 2016  Nikolay Platov
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,25 +16,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nikoladasm.examples.aspark_angularjs_rest;
+package nikoladasm.examples.aspark_angularjs_rest.elements;
 
-import java.io.Console;
+import org.openqa.selenium.support.FindBy;
 
-import nikoladasm.commons.configuration.properties.PropertyLoader;
+import ru.yandex.qatools.htmlelements.element.*;
 
-
-public class Launcher {
-
-	public static void main(String[] args) {
-		Config config = PropertyLoader.getInstance().populate(Config.class);
-		TestCasesService service = new TestCasesService(config);
-		service.start();
-		System.out.println("Application run on address \""+config.ipAddress+"\" and port \""+config.port+"\"");
-		Console console = System.console();
-		System.out.println("Enter \"x\" for exit");
-		try {
-			while (!console.readLine().trim().equalsIgnoreCase("x"));
-		} catch (Exception e) {}
-		service.stop();
+public class PaginationElement extends HtmlElement {
+	
+	@FindBy(tagName="span")
+	private TextBlock text;
+	@FindBy(tagName="a")
+	private Link link;
+	
+	public String text() {
+		return text.getText();
+	}
+	
+	public String linkText() {
+		return link.getText();
+	}
+	
+	public String reference() {
+		return link.getReference();
+	}
+	
+	public void click() {
+		link.click();
 	}
 }
