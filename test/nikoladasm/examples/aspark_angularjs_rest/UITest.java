@@ -29,11 +29,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 
@@ -42,6 +48,10 @@ import ru.yandex.qatools.allure.annotations.*;
 import nikoladasm.examples.aspark_angularjs_rest.TestCasesService;
 import nikoladasm.examples.aspark_angularjs_rest.dataobjects.Pagination;
 import nikoladasm.examples.aspark_angularjs_rest.dataobjects.TestCaseWithLinks;
+import nikoladasm.webdriver.wrapper.WebDriverListenableWrapper;
+
+import static nikoladasm.webdriver.wrapper.WebDriverWrapperFactory.wrapWebDriver;
+import static nikoladasm.webdriver.wrapper.EventListenerLocation.*;
 
 @Title("Basic UI test suite")
 public class UITest extends BaseTest {
@@ -63,7 +73,7 @@ public class UITest extends BaseTest {
 	
 	@BeforeClass
 	public static void serviceStart() {
-		System.setProperty("webserver.ip.address", "192.168.0.59");
+		System.setProperty("webserver.ip.address", "192.168.0.62");
 		System.setProperty("webserver.port", "8080");
 		db = DBMaker.memoryDB().make();
 		Config config = new Config();
@@ -81,7 +91,10 @@ public class UITest extends BaseTest {
 	@Before
 	public void setupWD() throws MalformedURLException, FileNotFoundException {
 		String testDataPath = System.getProperty("user.dir")+"/testdata/";
-		driver = new PhantomJSDriver();
+		//driver = new PhantomJSDriver();
+		driver = new RemoteWebDriver(new URL("http://192.168.0.230:4444/wd/hub"), DesiredCapabilities.firefox());
+		driver = wrapWebDriver(driver);
+		setListeners((WebDriverListenableWrapper) driver);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		ConcurrentNavigableMap<Long, String> map = db.treeMap("testCases");
 		ConcurrentNavigableMap<String, Long> index = db.treeMap("testCasesTitleIndex");
@@ -100,6 +113,37 @@ public class UITest extends BaseTest {
 		testCase51 = yaml.loadAs(new FileInputStream(testDataPath+"testcase51.yml"), TestCaseWithLinks.class);
 		testCase51i = yaml.loadAs(new FileInputStream(testDataPath+"testcase51i.yml"), TestCaseWithLinks.class);
 		testCase11 = yaml.loadAs(new FileInputStream(testDataPath+"testcase11.yml"), TestCaseWithLinks.class);
+	}
+	
+	private void setListeners(WebDriverListenableWrapper driver) {
+		driver.setListener(BEFORE_CLICK, this::onClick);
+		driver.setListener(BEFORE_GET_TEXT, this::onGetText);
+	}
+	
+	private void onClick(WebDriver driver, WebElement element) {
+		flash("#FFFF00", 200, 4, element, driver);
+	}
+	
+	private void onGetText(WebDriver driver, WebElement element) {
+		flash("#FFFF00", 200, 4, element, driver);
+	}
+	
+	private void flash(String color, int interval, int count, WebElement element, WebDriver driver) {
+		JavascriptExecutor js = ((JavascriptExecutor) driver);
+		String bgcolor = element.getCssValue("backgroundColor");
+		for (int i = 0; i < count; i++) {
+			changeColor(color, interval, element, js);
+			changeColor(bgcolor, interval, element, js);
+		}
+	}
+	
+	private void changeColor(String color, int interval, WebElement element, JavascriptExecutor js) {
+		js.executeScript("arguments[0].style.backgroundColor = '"+color+"'", element);
+		try {
+			Thread.sleep(interval);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@After
